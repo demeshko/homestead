@@ -126,7 +126,7 @@ class Homestead
         mount_opts = []
 
         if (folder["type"] == "nfs")
-            mount_opts = folder["mount_options"] ? folder["mount_options"] : ['noatime', 'nolock', 'vers=3', 'udp', 'fsc', 'rw']
+            mount_opts = folder["mount_options"] ? folder["mount_options"] : ['nolock', 'vers=3', 'tcp', 'fsc', 'rw', 'noatime']
         elsif (folder["type"] == "smb")
             mount_opts = folder["mount_options"] ? folder["mount_options"] : ['vers=3.02', 'mfsymlinks']
         end
