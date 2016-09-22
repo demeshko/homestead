@@ -16,7 +16,7 @@ block="server {
     charset utf-8;
 
     location / {
-        try_files \$uri \$uri/ /app_dev.php?\$query_string;
+        try_files $uri /app_dev.php$is_args$args;
     }
 
     location = /favicon.ico { access_log off; log_not_found off; }
@@ -31,10 +31,11 @@ block="server {
 
     # DEV
     location ~ ^/(app_dev|app_test|config)\.php(/|\$) {
-        fastcgi_split_path_info ^(.+\.php)(/.+)\$;
-        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+        fastcgi_pass unix:/var/run/php/vagrant.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
 
         fastcgi_intercept_errors off;
         fastcgi_buffer_size 16k;
@@ -43,15 +44,17 @@ block="server {
 
     # PROD
     location ~ ^/app\.php(/|$) {
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+        fastcgi_pass unix:/var/run/php/vagrant.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
         include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        internal;
+
 
         fastcgi_intercept_errors off;
         fastcgi_buffer_size 16k;
         fastcgi_buffers 4 16k;
-        internal;
     }
 
     location ~ /\.ht {
