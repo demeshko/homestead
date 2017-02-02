@@ -14,7 +14,7 @@ class Homestead
 
     # Configure The Box
     config.vm.box = settings["box"] ||= "fractalzombie/homestead"
-    config.vm.box_version = settings["version"] ||= ">= 0.1.0"
+    config.vm.box_version = settings["version"] ||= ">= 0.2.0"
     config.vm.hostname = settings["hostname"] ||= "homestead"
 
     # Configure A Private Network IP
